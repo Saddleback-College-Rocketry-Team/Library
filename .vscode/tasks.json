@@ -1,25 +1,93 @@
+// ALL COMMANDS
 {
   "version": "2.0.0",
   "tasks": [
-    {
+    { // Builds main
       "label": "PIO Build (teensy41)",
       "type": "shell",
       "command": "pio",
       "args": ["run", "-e", "teensy41"],
       "group": "build"
     },
-    {
+    { // Builds test files
       "label": "PIO Test (native)",
       "type": "shell",
       "command": "pio",
       "args": ["test", "-e", "native"],
       "group": "test"
     },
-    {
+    { // Upload code to board
       "label": "PIO Upload (teensy41)",
       "type": "shell",
       "command": "pio",
       "args": ["run", "-e", "teensy41", "-t", "upload"]
+    },
+    { // Builds Doxygen
+        "label": "Doc: Build (Doxygen)",
+        "type": "shell",
+        "command": "doxygen",
+        "args": ["Doxyfile"]
+    },
+    { // Git Pull - no rebase
+      "label": "Git Pull: Update from GitHub",
+      "type": "shell",
+      "dependsOn": [
+        "_git_pull_merge"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    { // Git Add, Commit, Push
+      "label": "Git Push: Save and Publish",
+      "dependsOn": [
+        "_git_stage_all",
+        "_git_commit_if_needed",
+        "_git_pull_merge",
+        "_git_push"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    { // Git Add
+      "label": "_git_stage_all",
+      "type": "shell",
+      "command": "git",
+      "args": ["add", "-A"],
+      "hide": true,
+      "problemMatcher": []
+    },
+    { // Git Commit
+      "label": "_git_commit_if_needed",
+      "type": "shell",
+      "command": "git",
+      "args": ["commit", "-m", "\"${input:commitMessage}\""],
+      "hide": true,
+      "problemMatcher": []
+    },
+    { // Git Pull 
+      "label": "_git_pull_merge",
+      "type": "shell",
+      "command": "git",
+      "args": ["pull", "--no-rebase"],
+      "hide": true,
+      "problemMatcher": []
+    },
+    { // Git Push
+      "label": "_git_push",
+      "type": "shell",
+      "command": "git",
+      "args": ["push"],
+      "hide": true,
+      "problemMatcher": []
+    }
+  ],
+  // Input Commit Message
+  "inputs": [
+    {
+      "id": "commitMessage",
+      "type": "promptString",
+      "description": "What changed? (commit message)",
+      "default": "chore: update project files"
     }
   ]
 }
