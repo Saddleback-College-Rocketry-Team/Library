@@ -2,68 +2,87 @@
 #include <Arduino.h>
 
 /**
- * @brief Initializes and configures a transmitter via AT commands.
+ * @file transmitter.h
+ * @brief Transmitter class for configuring a radio module via AT commands.
+ */
+
+/**
+ * @brief Template class for a transmitter device using serial communication.
  *
- * This template function sets up a serial interface and sends AT commands
- * to configure a radio/transmitter module (commonly LoRa or similar).
- *
- * The function performs the following steps:
- * - Starts serial communication at the specified baud rate
- * - Verifies communication with the module using "AT"
- * - Sets the network ID
- * - Sets the device address
+ * This class initializes and configures a transmitter module using AT commands.
+ * It allows setting the network ID and device address over a serial interface.
  *
  * @tparam SerialT Type of the serial interface (e.g., HardwareSerial, SoftwareSerial).
- *
- * @param serial Reference to the serial interface used for communication.
- * @param network Network ID to assign to the transmitter.
- * @param address Address ID to assign to the transmitter.
- * @param baudRate Baud rate for serial communication (default: 115200).
- * @param waitMs Delay time (in milliseconds) between commands (default: 200 ms).
  */
+
+
 template <typename SerialT>
-void transmitter(
-    SerialT& serial,
-    long network,
-    long address,
-    unsigned long baudRate = 115200,
-    unsigned long waitMs = 200
-) {
-    /** 
-     * @brief Initialize serial communication with the transmitter module.
-     * 
-     * Begins communication at the specified baud rate so commands
-     * can be sent to the module.
+class Transmitter {
+public:
+    /**
+     * @brief Constructor for Transmitter.
+     *
+     * @param serial Reference to the serial interface.
+     * @param network Network ID for the transmitter.
+     * @param address Address ID for the transmitter.
+     * @param baudRate Baud rate for communication (default: 115200).
+     * @param waitMs Delay between commands in milliseconds (default: 200).
      */
-    serial.begin(baudRate);
-    delay(waitMs);
+    Transmitter(
+        SerialT& serial,
+        long network,
+        long address,
+        unsigned long baudRate = 115200,
+        unsigned long waitMs = 200
+    )
+        : _serial(serial),
+          _network(network),
+          _address(address),
+          _baudRate(baudRate),
+          _waitMs(waitMs) {}
 
     /**
-     * @brief Check communication with the module.
-     * 
-     * "AT" is a basic attention command used to verify that the module
-     * is responding. A properly functioning module typically replies "OK".
+     * @brief Initialize and configure the transmitter.
+     *
+     * Sends AT commands to verify communication, set network ID,
+     * and assign device address.
      */
-    serial.println("AT");
-    delay(waitMs);
+    void begin() {
+        /** Initialize serial communication */
+        _serial.begin(_baudRate);
+        delay(_waitMs);
 
-    /**
-     * @brief Set the network ID of the transmitter.
-     * 
-     * "AT+NETWORKID=<value>" configures the network group.
-     * Only devices with the same network ID can communicate with each other.
-     */
-    serial.print("AT+NETWORKID=");
-    serial.println(network);
-    delay(waitMs);
+        /**
+         * @brief Check communication with module.
+         *
+         * "AT" command verifies that the module is responsive.
+         */
+        _serial.println("AT");
+        delay(_waitMs);
 
-    /**
-     * @brief Set the address of the transmitter.
-     * 
-     * "AT+ADDRESS=<value>" assigns a unique identifier to this device.
-     * This is used so other devices know where to send data.
-     */
-    serial.print("AT+ADDRESS=");
-    serial.println(address);
-    delay(waitMs);
-}
+        /**
+         * @brief Set network ID.
+         *
+         * Devices must share the same network ID to communicate.
+         */
+        _serial.print("AT+NETWORKID=");
+        _serial.println(_network);
+        delay(_waitMs);
+
+        /**
+         * @brief Set device address.
+         *
+         * Assigns a unique identifier to this transmitter.
+         */
+        _serial.print("AT+ADDRESS=");
+        _serial.println(_address);
+        delay(_waitMs);
+    }
+
+private:
+    SerialT& _serial;           /**< Serial interface */
+    long _network;              /**< Network ID */
+    long _address;              /**< Device address */
+    unsigned long _baudRate;    /**< Communication baud rate */
+    unsigned long _waitMs;      /**< Delay between commands */
+};
