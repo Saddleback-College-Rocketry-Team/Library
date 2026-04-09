@@ -35,16 +35,36 @@ NMEAGPS::NMEAGPS(HardwareSerial &ser){
     }
 
     void NMEAGPS::update() {
+        // Check if there are any bytes waiting in the Serial Port ("hardware's incoming mailbox")
         while (_serial->available()) {
+
+            // Read one single character (byte)
             char c = _serial->read();
-            if (c == '$') { _buffer = "$"; continue; }
+
+            // NMEA sentences always start with '$'. 
+            if (c == '$') { 
+                _buffer = "$"; // If we see this, we reset our buffer to start a fresh sentence.
+                continue; // Skip the rest of this loop iteration and get the next char
+            }
+
+            // Check if the character is a 'Newline' (\n), which marks the end of a sentence
             if (c == '\n') {
+                // We have a full line! Now we validate it using the checksum.
                 if (validateChecksum(_buffer)) {
-                    if (_buffer.startsWith("$GNGGA")) _lastGGA = _buffer;
-                    if (_buffer.startsWith("$GNRMC")) _lastRMC = _buffer;
+                    // If the sentence is valid, check the "Header" to see what data it is.
+                    // $GNGGA contains altitude, time, and fix quality.
+                    if (_buffer.startsWith("$GNGGA")){
+                        _lastGGA = _buffer; // Save it to our "storage" variable _lastGGA
+                    } 
+                    // $GNRMC contains speed, date, and basic coordinates.
+                    else if (_buffer.startsWith("$GNRMC")){
+                        _lastRMC = _buffer; // Save it to our "storage" variable _lastRMC
+                    }
                 }
-                _buffer = "";
+                _buffer = ""; // Clear the buffer so we are ready to build the next sentence.
             } else {
+                // If it's not a '$' or a '\n', it's just a regular character (like a '5' or a ',').
+                // Add it to the end of our growing string in _buffer
                 _buffer += c;
             }
         }
