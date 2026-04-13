@@ -30,10 +30,9 @@ public:
      */
     Transmitter(
         SerialT& serial,
-        long network,
-        long address,
-        unsigned long baudRate = 115200,
-        unsigned long waitMs = 200
+        int network,
+        int address,
+        unsigned int baudRate = 115200,
     )
         : _serial(serial),
           _network(network),
@@ -50,7 +49,7 @@ public:
     void begin() {
         /** Initialize serial communication */
         _serial.begin(_baudRate);
-        delay(_waitMs);
+        
 
         /**
          * @brief Check communication with module.
@@ -58,7 +57,7 @@ public:
          * "AT" command verifies that the module is responsive.
          */
         _serial.println("AT");
-        delay(_waitMs);
+        
 
         /**
          * @brief Set network ID.
@@ -67,7 +66,7 @@ public:
          */
         _serial.print("AT+NETWORKID=");
         _serial.println(_network);
-        delay(_waitMs);
+
 
         /**
          * @brief Set device address.
@@ -76,7 +75,12 @@ public:
          */
         _serial.print("AT+ADDRESS=");
         _serial.println(_address);
-        delay(_waitMs);
+        
+    }
+    void callToTransmitter(){
+        
+        _serial.print("AT+SEND=");
+        _serial.println(_address);
     }
 
 private:
