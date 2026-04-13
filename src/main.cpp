@@ -4,7 +4,10 @@
  * @date 2026-03-06
  * 
  */
-#include <Arduino.h>
+#ifdef ARDUINO
+#include <Arduino.h>  // To make it compatible for Platform.IO
+                      // delete if you're using Arduino IDE
+#endif
 
 // put function declarations here:
 int myFunction(int, int);
