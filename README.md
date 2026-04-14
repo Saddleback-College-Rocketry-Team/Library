@@ -1,5 +1,9 @@
-# Rocketry-Template ![Build](https://github.com/ORG/REPO/actions/workflows/build.yml/badge.svg)[![Docs](https://img.shields.io/badge/docs-doxygen-blue)](https://saddleback-college-rocketry-team.github.io/Rocketry-Template/)
-Creating a template for Saddleback Rocketry that should have Docker (run program for all computers) and CI
+# Rocketry-Library # Rocketry-Template
+
+[![Build](https://github.com/saddleback-college-rocketry-team/Rocketry-Template/actions/workflows/native.yml/badge.svg?branch=main)](https://github.com/saddleback-college-rocketry-team/Rocketry-Template/actions/workflows/native.yml)
+[![Docs](https://img.shields.io/badge/docs-doxygen-blue)](https://saddleback-college-rocketry-team.github.io/Rocketry-Template/)
+
+Library containing common code that will most likely be used throughout a variety of projects
 
 ## Install:
 1. [VSCode](https://code.visualstudio.com/Download)
