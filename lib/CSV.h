@@ -17,14 +17,14 @@
  * @tparam SDT Type of the SD interface (e.g., SD, SdFat).
  */
 template <typename SDT>
-class SDManager {
+class CSV {
 public:
     /**
      * @brief Constructor for SDManager.
      *
      * @param sd Reference to the SD interface.
      */
-    SDManager(SDT& sd)
+    CSV(SDT& sd)
         : _sd(sd) {}
 
     /**
