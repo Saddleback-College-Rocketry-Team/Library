@@ -1,4 +1,10 @@
+/**
+ * @file NMEAGPS.cpp
+ * @author your name (you@domain.com)
+ * @brief implmentation details of NMEAGPS functions
+ */
 #include "NMEAGPS.h"
+
 
 NMEAGPS::NMEAGPS(HardwareSerial &ser){
     _serial = &ser;

@@ -1,5 +1,9 @@
+/**
+ * @file NMEAGPS.h
+ * @brief function signatures for NMEAGPS
+ */
 #pragma once
-#include<Arduino.h>
+#include <Arduino.h>
 
 class NMEAGPS{
 private:
@@ -8,8 +12,13 @@ private:
     String _lastGGA;
     String _lastRMC;
 
-    // Basic NMEA checksum validation 
-    // helper function for update()
+    /**
+     * @brief checks if nema sentence 
+     * 
+     * @param s nmea sentece to check
+     * @return true, valid sentence
+     * @return false, not valid
+     */
     bool validateChecksum(const String &s);
 
 public:

@@ -4,7 +4,10 @@
  * @date 2026-03-06
  * 
  */
-#ifdef ARDUINO
+#ifndef MAIN_CPP
+#define MAIN_CPP
+
+// LIBRARIES
 #include <Arduino.h>  // To make it compatible for Platform.IO
                       // delete if you're using Arduino IDE
 #endif
