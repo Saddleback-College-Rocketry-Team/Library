@@ -11,3 +11,6 @@ Library containing common code that will most likely be used throughout a variet
 
 Optional not needed
 1. [Docker comment generator](https://marketplace.visualstudio.com/items?itemName=cschlosser.doxdocgen)
+
+## Helpful Resources
+* How to Create Library: https://docs.platformio.org/en/latest/librarymanager/creating.html
