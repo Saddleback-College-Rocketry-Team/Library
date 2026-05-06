@@ -50,19 +50,60 @@ void CSV::createCSV(const char header[]) {
 } // END void createCSV
 
 /**
- * @brief Append a row of data to a CSV file.
+ * @brief flushes 
+ *
+ * forces any buffer data to be physcially written
+ * to the sd card. Ensures no data is lost when
+ * microcontroller suddenly powers off
+ */
+void CSV::flush() {
+    if (writeFile) {
+        writeFile.flush();
+    }
+}
+
+
+/**
+ * @brief Append a row of data to a CSV file for only 1 param
  *
  * Opens the file and writes a new line of data.
  *
  * @param data data to write to file
  */
 template <typename T>
-void CSV::writeToFile(const T data) {
+void writeOne(const T& data) {
+    writeFile.print(data);
+}
+
+/**
+ * @brief Append a row of data to a CSV file for any number of parameters
+ *
+ * Opens the file and writes a new line of data.
+ *
+ * @param value multiple data to write to file
+ */
+template <typename T, typename... Args>
+void writeOne(const T& data, const Args&... args) {
+    writeFile.print(data);
+    writeFile.print(",");
+    writeOne(args...);
+}
+
+/**
+ * @brief Append a row of data to a CSV file.
+ *
+ * Opens the file and writes a new line of data.
+ *
+ * @param args data to write to file. Can be any number of arguments
+ */
+template <typename... Args>
+void CSV::writeToFile(const Args&... args) {
     /**
      * writing to file
      */
     if (writeFile) {
-        writeFile.println(data);
+        writeOne(args...);
+        writeFile.println();
     }
     /**
      * Ouput error message if cannot find
@@ -71,9 +112,4 @@ void CSV::writeToFile(const T data) {
         Serial.print("Error! Cannot find file: ");
         Serial.println(fileName);
     }
-
-    /**
-     * write to file and flush buffer
-     */
-    writeFile.flush();
 } // END void writeToFile
