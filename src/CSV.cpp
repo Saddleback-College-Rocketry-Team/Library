@@ -58,9 +58,6 @@ void CSV::createCSV(const char header[]) {
  */
 template <typename T>
 void CSV::writeToFile(const T data) {
-    
-    File writeFile = SD.open(fileName, FILE_WRITE);
-
     /**
      * writing to file
      */
