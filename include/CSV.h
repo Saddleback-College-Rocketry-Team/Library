@@ -17,6 +17,26 @@ private:
     const char* fileName;
     File writeFile;
 
+    /**
+     * @brief Append a row of data to a CSV file for any number of parameters
+     *
+     * Opens the file and writes a new line of data.
+     *
+     * @param value multiple data to write to file
+     */
+    template <typename T>
+    void writeOne(const T& value);
+
+    /**
+     * @brief Append a row of data to a CSV file.
+     *
+     * Opens the file and writes a new line of data.
+     *
+     * @param args data to write to file. Can be any number of arguments
+     */
+    template <typename T, typename... Args>
+    void writeOne(const T& value, const Args&... args);
+
 public:
     /**
      * @brief Constructor for CSV.
@@ -36,13 +56,22 @@ public:
     void createCSV(const char header[]);
 
     /**
+     * @brief flushes 
+     *
+     * forces any buffer data to be physcially written
+     * to the sd card. Ensures no data is lost when
+     * microcontroller suddenly powers off
+     */
+    void flush();
+
+    /**
      * @brief Append a row of data to a CSV file.
      *
      * Opens the file and writes a new line of data.
      *
      * @param data data to write to file
      */
-    template <typename T>
-    void writeToFile(const T data);
+    template <typename... Args>
+    void writeToFile(const Args&... args);
 
 }; // END class CSV
