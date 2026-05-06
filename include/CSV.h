@@ -18,24 +18,30 @@ private:
     File writeFile;
 
     /**
+     * @brief Append a row of data to a CSV file for only 1 param
+     *
+     * Opens the file and writes a new line of data.
+     *
+     * @param data data to write to file
+     */
+    template <typename T>
+    void CSV::writeOne(const T& data) {
+        writeFile.print(data);
+    } // END writeOne
+
+    /**
      * @brief Append a row of data to a CSV file for any number of parameters
      *
      * Opens the file and writes a new line of data.
      *
      * @param value multiple data to write to file
      */
-    template <typename T>
-    void writeOne(const T& value);
-
-    /**
-     * @brief Append a row of data to a CSV file.
-     *
-     * Opens the file and writes a new line of data.
-     *
-     * @param args data to write to file. Can be any number of arguments
-     */
     template <typename T, typename... Args>
-    void writeOne(const T& value, const Args&... args);
+    void CSV::writeOne(const T& data, const Args&... args) {
+        writeFile.print(data);
+        writeFile.print(",");
+        writeOne(args...);
+    } // END writeOne
 
 public:
     /**
@@ -64,14 +70,29 @@ public:
      */
     void flush();
 
+/**
+ * @brief Append a row of data to a CSV file.
+ *
+ * Opens the file and writes a new line of data.
+ *
+ * @param args data to write to file. Can be any number of arguments
+ */
+template <typename... Args>
+void CSV::writeToFile(const Args&... args) {
     /**
-     * @brief Append a row of data to a CSV file.
-     *
-     * Opens the file and writes a new line of data.
-     *
-     * @param data data to write to file
+     * writing to file
      */
-    template <typename... Args>
-    void writeToFile(const Args&... args);
+    if (writeFile) {
+        writeOne(args...);
+        writeFile.println();
+    }
+    /**
+     * Ouput error message if cannot find
+     */
+    else {
+        Serial.print("Error! Cannot find file: ");
+        Serial.println(fileName);
+    }
+} // END void writeToFile
 
 }; // END class CSV
