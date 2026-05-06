@@ -71,7 +71,7 @@ void CSV::flush() {
  * @param data data to write to file
  */
 template <typename T>
-void writeOne(const T& data) {
+void CSV::writeOne(const T& data) {
     writeFile.print(data);
 }
 
@@ -83,7 +83,7 @@ void writeOne(const T& data) {
  * @param value multiple data to write to file
  */
 template <typename T, typename... Args>
-void writeOne(const T& data, const Args&... args) {
+void CSV::writeOne(const T& data, const Args&... args) {
     writeFile.print(data);
     writeFile.print(",");
     writeOne(args...);
