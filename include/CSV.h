@@ -25,7 +25,7 @@ private:
      * @param data data to write to file
      */
     template <typename T>
-    void CSV::writeOne(const T& data) {
+    void writeOne(const T& data) {
         writeFile.print(data);
     } // END writeOne
 
@@ -37,7 +37,7 @@ private:
      * @param value multiple data to write to file
      */
     template <typename T, typename... Args>
-    void CSV::writeOne(const T& data, const Args&... args) {
+    void writeOne(const T& data, const Args&... args) {
         writeFile.print(data);
         writeFile.print(",");
         writeOne(args...);
@@ -70,29 +70,29 @@ public:
      */
     void flush();
 
-/**
- * @brief Append a row of data to a CSV file.
- *
- * Opens the file and writes a new line of data.
- *
- * @param args data to write to file. Can be any number of arguments
- */
-template <typename... Args>
-void CSV::writeToFile(const Args&... args) {
     /**
-     * writing to file
+     * @brief Append a row of data to a CSV file.
+     *
+     * Opens the file and writes a new line of data.
+     *
+     * @param args data to write to file. Can be any number of arguments
      */
-    if (writeFile) {
-        writeOne(args...);
-        writeFile.println();
-    }
-    /**
-     * Ouput error message if cannot find
-     */
-    else {
-        Serial.print("Error! Cannot find file: ");
-        Serial.println(fileName);
-    }
-} // END void writeToFile
+    template <typename... Args>
+    void writeToFile(const Args&... args) {
+        /**
+         * writing to file
+         */
+        if (writeFile) {
+            writeOne(args...);
+            writeFile.println();
+        }
+        /**
+         * Ouput error message if cannot find
+         */
+        else {
+            Serial.print("Error! Cannot find file: ");
+            Serial.println(fileName);
+        }
+    } // END void writeToFile
 
 }; // END class CSV
